@@ -1,0 +1,198 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,mexico]{babel}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+\usepackage{dirtytalk}
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+\usepackage{hyperref}
+\usepackage{float}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+
+\urlstyle{same}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\title{Plantilla Facultad de Ciencias, UNAM}
+\author{Javier Alejandro Rivera Zavala}
+\date{\today}
+
+\begin{document}
+
+\thispagestyle{empty}
+	
+	\begin{figure}[ht]
+	  	\begin{center}
+        \includegraphics[width=13cm]{Logo_UNAM.png}
+		\label{EscudoUNAM}
+        \end{center}	     
+	\end{figure}
+	
+	\begin{center}
+	\vspace{0.8cm}
+	\LARGE
+	UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO 
+	
+	\vspace{0.7cm}
+	\LARGE
+	FACULTAD DE CIENCIAS
+	
+	\vspace{0.8 cm}	
+	\Large
+	\textbf{Práctica 1 : Introducción a hilos}
+
+	\vspace{0.8 cm}
+	\normalsize	
+	ALUMNO\\
+	\vspace{.2cm}
+	\large   
+    \textbf{Javier Alejandro Rivera Zavala  - \texttt{311288876}}\\   
+	\vspace{1 cm}
+	\normalsize	
+	PROFESOR TITULAR\\
+	\vspace{.2cm}
+	\large
+	\textbf{Gilde Valeria Rodríguez Jiménez}
+	
+	\vspace{1 cm}
+	PROFESORES ADJUNTOS \\
+	\vspace{.2cm}
+	\large
+	\textbf{Rogelio Alcantar Arenas}\\	
+    \textbf{Gibran Aguilar Zuñiga}\\	
+    \textbf{Luis Ángel Leyva Castillo}\\	
+	\vspace{1.3cm}
+	
+	\normalsize	
+	ASIGNATURA \\
+	\vspace{.2cm}
+	\large
+	\textbf{Computación concurrente}
+	
+	\vspace{1 cm}
+	\textit{14 de Febrero del 2024}
+	\end{center}
+        \newpage
+        
+\section*{Preguntas}
+\begin{enumerate}
+    \item ¿Por qué se utiliza Interrupted Exception en el método main? \\
+    Sirve para manejar la excepción que podría ocurrir cuando se utiliza el método join() para esperar a que los hilos terminen.
+    El método join puede provocar que se lance la excepción InterruptedException si el hilo actual es interrumpido mientras está esperando a que otro hilo termine su ejecución. 
+    \item ¿Para qué sirve el método Join? \\
+    En este caso, sirve para que el hilo que manda a llamar a join(), digamos h1, espere a que el hilo desde donde se llama dicho método, el de main, termine su ejecución. Sirve para \say{frenar} un hilo y que ya no se ejecute nada dentro de él.
+    \item ¿Qué pasa si no le hacemos Join a los hilos?\\
+    El hilo que mande a llamar a join() dentro de otro, no esperara a que el hilo desde el cuál se llamo a join() termine su ejecución y por lo tanto se mantendran en ejecución de forma concurrente
+    \item ¿Cuales son las ventajas de implementar Runnable contra   extender de Thread? \\
+    Implementar una interfaz siempre es preferible antes que extender una clase, toda vez que Java así como otros lenguajes de programación, maneja un sistema de herencia en una sola línea, lo cuál limita el comportamiento y atributos de que podemos añadir a la clase que extiende, en comparación, una clase puede implementar cuantas interfaces quiera y así verse mucho más enriquecida.
+    \item ¿Cuál es la diferencia de implementar Runnable contra Callable?\\
+    Callable es una versión mejorada de Runnable, podemos ejecutar tareas de tipo Runnable haciendo uso de la clase Thread o ExecutorService, pero sólo podemos emplear Callable con ExecutorService. La interfaz Runnable sólo cuenta con el método run() que no tiene excepciones verificadas ni devuelve ninguna clase de valor/objeto, por otro lado, Callable cuenta con call() que si puede lanzr excepciones verificadas y devolver valores.
+    \item ¿Se puede predecir el orden en el que se imprime el mensaje de la clase Hilos?\\
+    No, pueden aparecer el cualquier orden.
+    \item En el archivo Hilos2.java, ¿Qué pasa si sacamos la instancia de la clase “h” de t1, es decir, poner h antes de declarar t1?\\
+    El objeto de la clase Hilos2 podría vivir fuera del hilo hasta que la memoria correspondiente al mismo, sea desasignada, en cambio, con la implementación actual, h sólo vive dentro de t1.   
+    \item ¿Cómo podríamos darle un comportamiento diferente a los hilos? \\
+    Una posible forma de modificar el comportamiento de los hilos de forma individualizada es crear los hilos como en el archivo Hilos2 y sobreescribiendo el método run() de cada hilo de forma distinta, esto nos permitiría dotar de \say{individualidad} a cada hilo.
+
+    \item \textbf{Sección Synchronized:} Antes de empezar, piensa que es lo que hace Synchronized, analizando lo que paso en los ejercicio anteriores, ¿Que significara?... \\
+    Posterior a eso, realiza una breve investigación de lo que hace y escríbelo de forma breve.
+    Descomenta el siguiente bloque de código y comenta el que no lo estaba, ¿Notas alguna diferencia?\\
+    Synchronized sirve, como cabría esperar por su nombre, para sincronizar el acceso a un recurso compartido por parte de los hilos, de modo que sólo un hilo pueda acceder y modificar uno de esos recursos a la vez. Es importante hacer notar que, aunque para esta práctica nos centramos en los hilos, existe también la sincronización de procesos. En java la sincronización se implementa a través de locks (candados ó cerraduras), sólo un hilo puede tener uno de dichos locks en un determinado momento, lo que se conoce como estar en el monitor, situación que sólo es posible para uno y sólo un hilo a la vez. La sincronización permite la exclusión mutua, de modo que un hilo no puede intervenir con las tareas del otro y viceversa, en lo que se refiere al acceso de recursos compartidos.
+    \newpage
+    
+    \item Escribe que variables son locales (variables que están en memoria del hilo) y que variables son compartidas de cada archivo y el por qué. Puedes tomarle captura al código y encerrar en un recuadro dichas variables.\\
+    \begin{itemize}
+        \item \textbf{Clase Contador:} Cada hilo cuenta con un nombre propio que a su vez le sirve como identificador idHilo y por lo tanto es una variable del hilo, mientras que el número de rondas es una \say{constante} global pues es de clase. El valor es una variable compartida y el arreglo para permisos de mi implementación también es accesible para todos los hilos, aunque guarda permisos asignados a cada hilo individual, pero de forma externa. También viven en el hilo numHilos, i e incluso e.
+        \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{contador.png}        
+        \end{figure}
+        \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{contador1.png}        
+        \end{figure}
+        \item \textbf{Clase ContadorC:} La variable contador es accesible para todos los hilos así como las constantes RONDAS e HILOS pues se definen como atributos de clase, por otro lado, las variables total e i viven dentro del hilo ya que son locales del método call().
+         \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{contadorc.png}        
+        \end{figure}        
+        \item \textbf{Clase ContadorS:} Nuevamente, RONDAS es una constante de clase y por lo tanto accesible a todos los hilos, lo mismo para la variable valor que es un recurso compartido a modificar por cada hilo al llamar suma. Otra variable local para cada hilo es i que sólo vive en el for de suma, en cualquiera de sus implementaciones.
+        \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{contadors.png}        
+        \end{figure}
+        \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{contadors1.png}        
+        \end{figure}
+        \item \textbf{Clase herencia/Hilos:} La variable contador es accesible a todos los hilos al estar declarada de forma global como variable de clase, por otro lado, las constantes HILOS y RONDAS son también de clase y por lo tanto accesibles para todos los hilos. Como variables de hilo tenemos id\_hilo pues cada hilo cuenta con un identificador propio y las variables i junto con exception son locales del método suma por lo que sólo viven dentro del hilo.
+        \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{hilosh.png}        
+        \end{figure}
+        \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{hilosh1.png}        
+        \end{figure}
+        \newpage
+        \item \textbf{Clase hilos/Hilos:} En este caso, todas nuestras variables viven dentro de un hilo, existe la variable \say{hilos} que vive dentro del hilo principal y que apunta a la estructura de datos en la que están almacenados el resto de hilos. En las clases anteriores omití las variables locales del hilo principal en main, pues resultaba repetitivo y no es lo que se esperaba dado el contexto de la pregunta, sin embargo, hago notar que en todas ellas las variables locales de main, pueden considerarse como variables de hilo.
+        \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{hiloshi1.png}        
+        \end{figure}
+        \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{hiloshi.png}        
+        \end{figure}
+        \newpage
+        \item \textbf{Clase Hilos2:} Nuevamente, sólo hay variables de hilo pues todas viven en la definición de t1 o en la definición del hilo principal main.
+        \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{hilos2.png}        
+        \end{figure}
+    \end{itemize}
+    
+    
+    
+    \item Escribe lo aprendido sobre esta practica, así como tus conclusiones. También comparte si tuviste dificultades y los descubrimientos o alguna cosa de interés.\\
+    En general fue una práctica bastante sencilla, me sirvió para asentar los conocimientos sobre hilos y procesos que adquirí durante mi curso de sistemas operativos. Aunque apenas vimos una pequeña introducción al uso de hilos en java, podemos ver como esta herramienta podría ser empleada para mejorar el rendimiento de programas como los que hemos desarrollado a lo largo de la carrera. Así como sus ventajas, podemos también apreciar algunos de los desafíos que supone el uso compartido de recursos y que tan importante es una sincronización adecuada de los hilos, esto con el fin de obtener los resultados deseados de forma estable.\\
+    Por último, añado aquí la captura del código solicitada, para la primera parte de la práctica donde se nos pide crear, inicializar y detener 10 hilos, aunque ya se visualiza en las capturas de la clase hilos/Hilos.
+    \begin{figure}[!h]
+            \centering
+            \includegraphics[scale=0.50]{hiloscreacion.png}        
+        \end{figure}
+\end{enumerate}
+\newpage
+Nota: No comenté todo el código de esta práctica pues la mayor parte del mismo no es de mi creación y Kass me dijo que sólo comentara lo que yo hice, por motivos similares, no se tomaron en consideración los errores señalados por sonarlint.
+
+\section*{Referencias}
+\begin{itemize}
+    \item Baeldung (8 de enero de 2024). The Thread.join() Method in Java. Baeldung \url{https://www.baeldung.com/java-thread-join}
+    \item Fadatare Ramesh (s.f.). InterruptedException in Java with Example. Java guides \url{https://www.javaguides.net/2019/07/interruptedexception-in-java-with-example.html}
+    \item Baeldung (8 de enero de 2024). Runnable vs. Callable in Java. Baeldung \url {https://www.baeldung.com/java-runnable-callable}
+    \item Geeksforgeeks (s.f.). Synchronization in Java. Geeksforgeeks \url{https://www.geeksforgeeks.org/synchronization-in-java/}
+    \item Baeldung (8 de enero de 2024). How to Handle InterruptedException in Java, Bealdung \url{https://www.baeldung.com/java-interrupted-exception}
+\end{itemize}
+
+\end{document}
